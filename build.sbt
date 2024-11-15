@@ -10,5 +10,5 @@ lazy val root = project
     version := "0.1.0-SNAPSHOT",
     scalaVersion := scala3Version,
     libraryDependencies += "com.siriusxm" %% "snapshot4s-scalatest" % snapshot4sVersion % Test,
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % "test"
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.19" % Test
   )
