@@ -1,5 +1,7 @@
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
+import scodec.bits.ByteVector
+import snapshot4s.Repr
 import snapshot4s.generated.*
 import snapshot4s.scalatest.SnapshotAssertions
 
@@ -17,6 +19,43 @@ class MySuite extends AnyFunSpec, SnapshotAssertions, Matchers {
       // you should specify snapshot file name.
       // file is under src/test/resources/snapshot/
       assertFileSnapshot(Module.lipsum, "lipsum.txt")
+    }
+  }
+
+  describe("JsonModule") {
+    it("should return JSON -- inline snapshot") {
+      assertInlineSnapshot(
+        JsonModule.makeObject(10).toString,
+        """{
+  "fact" : 3628800,
+  "power" : 100
+}"""
+      )
+    }
+
+    it("should return JSON -- file snapshot") {
+      assertFileSnapshot(JsonModule.makeObject(10).toString, "json.json")
+    }
+  }
+
+  describe("BinaryModule") {
+    given Repr[ByteVector] =
+      (bv: ByteVector) => s"""{ import scodec.bits.hex; hex"${bv.toHex}" }"""
+
+    it("should return UTF-8 w/BOM -- inline snapshot") {
+      assertInlineSnapshot(
+        BinaryModule.withBOM("windymelt"), {
+          import scodec.bits.hex
+          hex"efbbbf77696e64796d656c74"
+        }
+      )
+    }
+
+    it("should return UTF-8 w/BOM -- file snapshot") {
+      assertFileSnapshot(
+        BinaryModule.withBOM("windymelt").toHexDump,
+        "binary.txt"
+      )
     }
   }
 }
