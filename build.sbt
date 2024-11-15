@@ -12,8 +12,7 @@ lazy val root = project
     scalaVersion := scala3Version,
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core",
-      "io.circe" %% "circe-generic",
-      "io.circe" %% "circe-parser"
+      "io.circe" %% "circe-generic"
     ).map(_ % circeVersion),
     libraryDependencies += "org.scodec" %% "scodec-bits" % "1.2.1",
     libraryDependencies += "org.scodec" %% "scodec-core" % "2.3.2",
